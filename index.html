@@ -48,12 +48,12 @@
 					</ul>
 				</div>
 
-				<div style="display: none;">
-					<span class="badge badge-secondary wallet-address">0x400BdE4ae95Fc53Db4871Abf1662E42AD4E49079</span> 
+				<div style="display: none;" id="metamastUserInfoNavbar">
+					<span class="badge badge-secondary wallet-address" id="metamaskUserInfoNavbarAddress"></span> 
 					<span class="badge badge-pill badge-success success-msg-wallet-address">Connected</span>
 				</div>
 				
-				<button class="btn btn-info my-2 my-sm-0 login-metamask-button" type="submit"> <img src="img/metamask-fox-icon.png" height="22" alt=""> Connect Metamask</button>
+				<button style="display: none;" class="btn btn-info my-2 my-sm-0 login-metamask-button" type="submit" id="connectMetamaskButton"> <img src="img/metamask-fox-icon.png" height="22" alt=""> Connect Metamask</button>
   			</div>
 		</nav>
 
@@ -172,23 +172,55 @@
 		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
-		<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-		
 		<script>
-			$('document').ready(function() {
 
-				/*if (window.ethereum) {
-					window.web3 = new Web3(window.ethereum);
-					window.ethereum.enable();
-					return true;
+			const initialize = async () => {
+
+				const loginMetamaskButton = document.getElementById('connectMetamaskButton');
+				const metamastUserInfoNavbar = document.getElementById('metamastUserInfoNavbar');
+				const metamaskUserInfoNavbarAddress = document.getElementById('metamaskUserInfoNavbarAddress');
+
+				let accounts = null;
+				const metamaskIcon = "<img src='img/metamask-fox-icon.png' height='22'>";
+
+				const updateHeaderAccountInfo = (address) => {
+					metamaskUserInfoNavbarAddress.innerText = address;
+
+					loginMetamaskButton.style.display = 'none';
+					metamastUserInfoNavbar.style.display = 'block';
+				};
+
+				const isMetaMaskInstalled = () => {
+					const { ethereum } = window;
+					ethereum.autoRefreshOnNetworkChange = false;
+					
+					return Boolean(ethereum && ethereum.isMetaMask);
+				};
+
+				if(!isMetaMaskInstalled()) {
+					loginMetamaskButton.style.display = 'block';
+					loginMetamaskButton.onclick = "";
+					loginMetamaskButton.innerText = metamaskIcon + ' You need to install Metamask first';
+					loginMetamaskButton.disabled = true;
+				}
+				else {
+					accounts = await ethereum.request({ method: 'eth_accounts' });
+
+					if(accounts.length > 0) {
+						updateHeaderAccountInfo(accounts);
+					}
+					else {
+						loginMetamaskButton.style.display = 'block';
+					}
 				}
 
-				if (typeof window.ethereum !== 'undefined') {
-					console.log('MetaMask is installed!');
-				}*/
-
-
-			});
+				document.querySelector('#connectMetamaskButton').addEventListener('click', async () => {
+					accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+					updateHeaderAccountInfo(accounts[0]);
+				});
+					
+			};
+			window.addEventListener('DOMContentLoaded', initialize);
 		</script>
 	</body>
 </html>
