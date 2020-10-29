@@ -11768,7 +11768,8 @@ select.form-control[multiple] {
 }
 
 .modal-content { 
-	background-color: #000;
+  background-color: #000;
+  border-radius: 3rem;
 }
 
 .loading-transaction-text{
