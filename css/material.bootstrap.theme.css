@@ -6748,7 +6748,7 @@ button.bg-primary:focus {
 }
 
 .bg-secondary {
-  background-color: #fff !important;
+  background-color: #6c757d !important;
 }
 
 a.bg-secondary:hover, a.bg-secondary:focus,
@@ -11743,4 +11743,39 @@ select.form-control[multiple] {
 
 .textarea:focus, textarea.form-control:focus, input.form-control:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="number"]:focus, [type="text"].form-control:focus, [type="password"].form-control:focus, [type="email"].form-control:focus, [type="tel"].form-control:focus, [contenteditable].form-control:focus {
   box-shadow: inset 0 -2px 0 #FFF;
+}
+
+.arrangementsPriceResume {
+  text-align: left;
+}
+
+.wallet-address {
+  font-size: 1em;
+  margin-right: 5px;
+}
+
+.success-msg-wallet-address {
+  font-size: 1em;
+}
+
+.subtitle-awards {
+	font-size: 0.8em;
+}
+
+.login-metamask-button {
+	font-weight: 500;
+	font-size: 1em;
+}
+
+.modal-content { 
+	background-color: #000;
+}
+
+.loading-transaction-text{
+	font-weight: 500;
+	font-size: 1.5em;
+}
+
+.loading-transaction-text-container {
+	text-align: center;
 }
