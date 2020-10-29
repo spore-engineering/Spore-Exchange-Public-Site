@@ -125,7 +125,7 @@
 												</div>
 											</div>
 										</div>
-										<button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Buy Spore Tokens</button>
+										<button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#exampleModal" id="buySporeButton">Buy Spore Tokens</button>
 									</div>
 								</div>
 							</div>
@@ -177,11 +177,11 @@
 			const initialize = async () => {
 
 				const loginMetamaskButton = document.getElementById('connectMetamaskButton');
+				const buySporeButton = document.getElementById('buySporeButton');
 				const metamastUserInfoNavbar = document.getElementById('metamastUserInfoNavbar');
 				const metamaskUserInfoNavbarAddress = document.getElementById('metamaskUserInfoNavbarAddress');
 
 				let accounts = null;
-				const metamaskIcon = "<img src='img/metamask-fox-icon.png' height='22'>";
 
 				const updateHeaderAccountInfo = (address) => {
 					metamaskUserInfoNavbarAddress.innerText = address;
@@ -192,19 +192,22 @@
 
 				const isMetaMaskInstalled = () => {
 					const { ethereum } = window;
-					ethereum.autoRefreshOnNetworkChange = false;
-					
 					return Boolean(ethereum && ethereum.isMetaMask);
 				};
 
 				if(!isMetaMaskInstalled()) {
 					loginMetamaskButton.style.display = 'block';
 					loginMetamaskButton.onclick = "";
-					loginMetamaskButton.innerText = metamaskIcon + ' You need to install Metamask first';
+					loginMetamaskButton.innerText = 'You need to install Metamask';
 					loginMetamaskButton.disabled = true;
+
+					buySporeButton.onclick = "";
+					buySporeButton.innerText = 'You need to install Metamask';
+					buySporeButton.disabled = true;
 				}
 				else {
 					accounts = await ethereum.request({ method: 'eth_accounts' });
+					ethereum.autoRefreshOnNetworkChange = false;
 
 					if(accounts.length > 0) {
 						updateHeaderAccountInfo(accounts);
@@ -218,7 +221,7 @@
 					accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 					updateHeaderAccountInfo(accounts[0]);
 				});
-					
+
 			};
 			window.addEventListener('DOMContentLoaded', initialize);
 		</script>
