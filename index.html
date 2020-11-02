@@ -37,13 +37,13 @@
 							<a class="nav-link" href="#">Exchange <span class="sr-only">(current)</span></a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">Etherscan <sup>↗</sup></a>
+							<a class="nav-link" href="https://etherscan.io/address/0x96853087c9e364fe9554fd6fcfe13bcd942b04d5" target="_blank">Etherscan <sup>↗</sup></a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">Uniswap <sup>↗</sup></a>
+							<a class="nav-link" href="https://info.uniswap.org/pair/0x35b3325d1852D3C67481f09361666bF3325307Da" target="_blank">Uniswap <sup>↗</sup></a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">Telegram <sup>↗</sup></a>
+							<a class="nav-link" href="https://t.me/spore_engineering" target="_blank">Telegram <sup>↗</sup></a>
 						</li>
 					</ul>
 				</div>
@@ -78,10 +78,10 @@
 
 						<div class="row mb-3">
 							<div class="col-md-6">
-								<img src="img/spore-logo-round-transparen.png" width="24" height="24" alt=""> 1 SPORE = 0.00147 ETH
+								<img src="img/spore-logo-round-transparen.png" width="24" height="24" alt=""> 1 SPORE = <span id="spore-eth-placeholder"></span></span> ETH
 							</div>
 							<div class="col-md-6">
-								<img src="img/eth-icon-logo.png" width="24" height="24" alt=""> 1 ETH = 679.63833 SPORE
+								<img src="img/eth-icon-logo.png" width="24" height="24" alt=""> 1 ETH = <span id="eth-spore-placeholder"></span></span> SPORE
 							</div>
 						</div>
 
@@ -105,20 +105,16 @@
 								<div class="tab-content tabContentSpore">
 									<div class="tab-pane fade active show" id="buy-spore">
 										<div class="form-group">
-											<label class="control-label">Please fill down below the amount of Spore Tokens you want to purchase.</label>
+											<label class="control-label mb-3">Please fill down below the amount of Spore Tokens you want to purchase.</label>
 											<div class="form-group">
-												<div class="input-group mb-3">
+												<div class="input-group mb-5">
 
-													<div class="input-group-prepend">
-														<span class="input-group-text"><img src="img/spore-logo-round-transparen.png" width="48" height="48" alt=""></span>
-													</div>
 													
-													<input type="text" class="form-control buy-spore-input" aria-label="Amount (to the nearest dollar)">
+													<input type="text" class="form-control" id="input-spore-amount">
 													
 													<div class="input-group-append">
 														<span class="input-group-text arrangementsPriceResume">
-															Total ETH: Ξ0.1847 <br> 
-															Total USD: $0.1847
+															Total: Ξ<span id="total-eth-calculated"></span> &nbsp; ($<span id="total-usd-calculated"></span>)</span>
 														</span>
 													</div>
 
@@ -130,9 +126,6 @@
 								</div>
 							</div>
 
-							<div class="card-footer text-muted">
-								<b>ETH:</b> $404,13 | <b>BTC:</b> $13.702,60 | <b>LTC:</b> $57,72 
-							</div>
 						</div>
 
 						<!--<hr> 
@@ -160,17 +153,27 @@
 
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><!--data-backdrop="static" data-keyboard="false"-->
 			<div class="modal-dialog" role="document">
-			  <div class="modal-content">
+				<div class="modal-content">
 				<div class="modal-body loading-transaction-text-container">
 					<img src="img/loading.gif" width="250"><br>
 					<span class="loading-transaction-text">Your transaction is being processed, please stand by, this screen will automatically disappear when the process it's completed ⌛</span>
 				</div>
-			  </div>
+				</div>
 			</div>
-		  </div>
+		</div>
+		
+
+		<input type="number" id="spore-eth-placeholder-raw-price" value="" style="display: none;">
+		<input type="number" id="eth-spore-placeholder-raw-price" value="" style="display: none;">
+		<input type="number" id="eth-placeholder-raw-price" value="" style="display: none;">
+		<input type="text" id="user-balance-active-account" value="" style="display: none;">
 
 		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+		<script src="js/web3.min.js"></script>
+		
+		
 
 		<script>
 
@@ -181,18 +184,39 @@
 				const metamastUserInfoNavbar = document.getElementById('metamastUserInfoNavbar');
 				const metamaskUserInfoNavbarAddress = document.getElementById('metamaskUserInfoNavbarAddress');
 
-				let accounts = null;
+				const sporePlaceholder = document.getElementById('spore-eth-placeholder');
+				const ethPlaceholder = document.getElementById('eth-spore-placeholder');
+				const sporePlaceholderRaw = document.getElementById('spore-eth-placeholder-raw-price');
+				const ethPlaceholderRaw = document.getElementById('eth-spore-placeholder-raw-price');
+				const ethPlaceholderOriginalRaw = document.getElementById('eth-placeholder-raw-price');
 
-				const updateHeaderAccountInfo = (address) => {
+				const totalEthCalculated = document.getElementById('total-eth-calculated');
+				const totalUsdCalculated = document.getElementById('total-usd-calculated');
+
+				let inputSporeAmount = document.getElementById('input-spore-amount');
+				let userBalanceActiveAccount = document.getElementById('user-balance-active-account');
+				
+				let accounts = null;
+				let web3;
+
+				const updateHeaderAccountInfo = async (address) => {
 					metamaskUserInfoNavbarAddress.innerText = address;
 
+					let userBalance = await web3.eth.getBalance(address);
+					
+					userBalanceActiveAccount.value = userBalance;
+					
 					loginMetamaskButton.style.display = 'none';
 					metamastUserInfoNavbar.style.display = 'block';
 				};
 
 				const isMetaMaskInstalled = () => {
 					const { ethereum } = window;
-					return Boolean(ethereum && ethereum.isMetaMask);
+					ethereum.autoRefreshOnNetworkChange = false;
+
+					web3 = new Web3(ethereum);
+
+					return Boolean(ethereum && ethereum.isMetaMask && web3);
 				};
 
 				if(!isMetaMaskInstalled()) {
@@ -206,11 +230,11 @@
 					buySporeButton.disabled = true;
 				}
 				else {
+					
 					accounts = await ethereum.request({ method: 'eth_accounts' });
-					ethereum.autoRefreshOnNetworkChange = false;
 
 					if(accounts.length > 0) {
-						updateHeaderAccountInfo(accounts);
+						updateHeaderAccountInfo(accounts[0]);
 					}
 					else {
 						loginMetamaskButton.style.display = 'block';
@@ -221,6 +245,58 @@
 					accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 					updateHeaderAccountInfo(accounts[0]);
 				});
+
+				inputSporeAmount.onkeyup = (data) => {
+					const sporePlaceholderRaw = document.getElementById('spore-eth-placeholder-raw-price').value * 1;
+					const ethPlaceholderRaw = document.getElementById('eth-spore-placeholder-raw-price').value * 1;
+					const ethPlaceholderOriginalRaw = document.getElementById('eth-placeholder-raw-price').value * 1;
+
+					totalEthCalculated.innerText = parseFloat(inputSporeAmount.value*sporePlaceholderRaw).toFixed(5);
+					totalUsdCalculated.innerText = parseFloat((inputSporeAmount.value*sporePlaceholderRaw)*ethPlaceholderOriginalRaw).toFixed(2);
+				};
+
+
+				const updatePairPriceInformation = () => {
+					const pairAddress = "0x35b3325d1852d3c67481f09361666bf3325307da";
+					const uniswapEndpoint = "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2";
+
+					const options = {
+						method: "post",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							query: `{ pair(id: "${pairAddress}") { token0 { id symbol name derivedETH } token1 { id symbol name derivedETH } reserve0 reserve1 reserveUSD trackedReserveETH token0Price token1Price volumeUSD txCount } }`
+						})
+					};
+
+					const optionsPriceETH = {
+						method: "post",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							query: `{ bundle(id: "1") { ethPrice } }`
+						})
+					};
+
+					fetch(uniswapEndpoint, options).then(response => response.json()).then(data => currentPairPriceInformation(data));
+					fetch(uniswapEndpoint, optionsPriceETH).then(response => response.json()).then(data => currentPriceETH(data));
+				};
+
+
+				const currentPairPriceInformation = (data) => {
+					sporePlaceholder.innerText = parseFloat(data.data.pair.token1Price).toFixed(5);
+					ethPlaceholder.innerText = parseFloat(data.data.pair.token0Price).toFixed(5);
+					sporePlaceholderRaw.value = data.data.pair.token1Price;
+					ethPlaceholderRaw.value = data.data.pair.token0Price;
+				};
+
+				const currentPriceETH = (data) => {
+					ethPlaceholderOriginalRaw.value = data.data.bundle.ethPrice;
+				};
+
+				updatePairPriceInformation();	
 
 			};
 			window.addEventListener('DOMContentLoaded', initialize);

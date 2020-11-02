@@ -11721,16 +11721,27 @@ select.form-control[multiple] {
 }
 
 .form-control { 
-  font-size: 2.5rem;
-  color: #FFF;
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #444;
+  background-color: #fff;
+  background-clip: padding-box;
+  padding-left: 10px;
+  border: 1px solid #222;
 }
 
 .input-group-text {
-  font-size: 1.5rem;
-}
 
-.buy-spore-input {
-  max-width: 40%;
+  align-items: center;
+  margin-bottom: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #adb5bd;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #444;
+  border: 1px solid #222;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -11738,7 +11749,9 @@ select.form-control[multiple] {
 }
 
 .form-control:focus {
-  color: #FFF;
+  color: #444;
+  background-color: #fff;
+  border-color: #222;
 }
 
 .textarea:focus, textarea.form-control:focus, input.form-control:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="number"]:focus, [type="text"].form-control:focus, [type="password"].form-control:focus, [type="email"].form-control:focus, [type="tel"].form-control:focus, [contenteditable].form-control:focus {
@@ -11779,4 +11792,9 @@ select.form-control[multiple] {
 
 .loading-transaction-text-container {
 	text-align: center;
+}
+
+.input-group .input-group-append .input-group-text {
+  padding-left: 0.50rem;
+  padding-right: 0.50rem;
 }
