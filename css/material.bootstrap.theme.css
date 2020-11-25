@@ -11780,21 +11780,11 @@ select.form-control[multiple] {
 	font-size: 1em;
 }
 
-.modal-content { 
-  background-color: #000;
-  border-radius: 3rem;
-}
-
-.loading-transaction-text{
-	font-weight: 500;
-	font-size: 1.5em;
-}
-
-.loading-transaction-text-container {
-	text-align: center;
-}
-
 .input-group .input-group-append .input-group-text {
   padding-left: 0.50rem;
   padding-right: 0.50rem;
+}
+
+.lightbox-text-color {
+  color: #000;
 }
