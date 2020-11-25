@@ -86,7 +86,7 @@
 						</div>-->
 
 						<div class="alert alert-secondary" role="alert">
-							Contract Address: <a href="https://rinkeby.etherscan.io/address/0xb6c48360e9844597b0e897fd24119f3a39614887">0xB6c48360e9844597B0e897Fd24119F3A39614887<sup>↗</sup></a>
+							Contract Address: <a href="https://rinkeby.etherscan.io/address/0xb6c48360e9844597b0e897fd24119f3a39614887" target="_blank">0xB6c48360e9844597B0e897Fd24119F3A39614887<sup>↗</sup></a>
 						  </div>
 
 						<div class="card text-white bg-dark mb-5">
@@ -211,6 +211,9 @@
 					
 					loginMetamaskButton.style.display = 'none';
 					metamastUserInfoNavbar.style.display = 'block';
+
+					buySporeButton.innerText = 'Buy Spore Tokens';
+					buySporeButton.disabled = false;
 				};
 
 				const isMetaMaskInstalled = () => {
@@ -241,6 +244,9 @@
 					}
 					else {
 						loginMetamaskButton.style.display = 'block';
+
+						buySporeButton.innerText = 'You need to connect Metamask';
+						buySporeButton.disabled = true;
 					}
 				}
 
