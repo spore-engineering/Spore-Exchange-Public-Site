@@ -297,7 +297,7 @@
 					}
 
 					swapContract().then(data => {
-						let swap = new web3.eth.Contract(data, '0x6D22A42704972AB5C73D2f71d7d5d20562b746aF');
+						let swap = new web3.eth.Contract(data, '0x893193Ab783059659D2799B462587A458c0500A6');
 						let amountTokens = inputSporeAmount.value*10**18 + '';
 
 						jQuery("#exampleModal").modal("show");
@@ -347,7 +347,7 @@
 					});
 
 					swapContract().then(data => {
-						let swap = new web3.eth.Contract(data, '0x6D22A42704972AB5C73D2f71d7d5d20562b746aF');
+						let swap = new web3.eth.Contract(data, '0x893193Ab783059659D2799B462587A458c0500A6');
 						let amountTokens = 1*10**18 + '';
 
 						swap.methods.quoteSpore(amountTokens).call().then(function(e) {

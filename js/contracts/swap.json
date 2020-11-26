@@ -22,7 +22,7 @@
 	{
 		"inputs": [
 			{
-				"internalType": "contract SporeToken",
+				"internalType": "contract IERC20",
 				"name": "_token",
 				"type": "address"
 			},
@@ -123,7 +123,7 @@
 		"name": "token",
 		"outputs": [
 			{
-				"internalType": "contract SporeToken",
+				"internalType": "contract IERC20",
 				"name": "",
 				"type": "address"
 			}
