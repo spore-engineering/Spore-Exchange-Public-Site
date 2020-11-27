@@ -298,7 +298,7 @@
 
 					swapContract().then(data => {
 						let swap = new web3.eth.Contract(data, '0x893193Ab783059659D2799B462587A458c0500A6');
-						let amountTokens = inputSporeAmount.value*10**18 + '';
+						let amountTokens = web3.utils.toWei(inputSporeAmount.value, 'ether');
 
 						jQuery("#exampleModal").modal("show");
 
@@ -348,11 +348,11 @@
 
 					swapContract().then(data => {
 						let swap = new web3.eth.Contract(data, '0x893193Ab783059659D2799B462587A458c0500A6');
-						let amountTokens = 1*10**18 + '';
+						let amountTokens = web3.utils.toWei('1', 'ether');
 
 						swap.methods.quoteSpore(amountTokens).call().then(function(e) {
 							let uintValue = e;
-							let formatValue = parseFloat(web3.utils.fromWei(uintValue, 'ether')).toFixed(5);
+							let formatValue = parseFloat(web3.utils.fromWei(uintValue, 'ether'));
 
 							placeholderSporeUnitPriceRaw.value = uintValue;
 							placeholderSporeUnitPriceFormatted.value = formatValue;
